@@ -1,4 +1,5 @@
 language: bash
+sudo: required
 env:
   global:
   - AWS_DEFAULT_REGION=ap-southeast-2
