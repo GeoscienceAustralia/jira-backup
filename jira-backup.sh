@@ -19,7 +19,6 @@ BKPMSG=$(curl -s --cookie $COOKIE_FILE_LOCATION --header "X-Atlassian-Token: no-
 
 #Checks if the backup procedure has failed
 if [ "$(echo "$BKPMSG" | grep -ic backup)" -ne 0 ]; then
-    rm $COOKIE_FILE_LOCATION
     echo 'Unable to make backup at this time'
     echo $BKPMSG
 fi
