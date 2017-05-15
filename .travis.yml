@@ -1,9 +1,8 @@
-# optionally specify a list of environments, for example to test different RDBMS
-env:
-  - USERNAME=jiraBackup
-  - PW=password123
 
 script:
-  - jira-backup.sh
+  - USERNAME=jiraBackup
+  - PW=password123
+  - chmod +x jira-backup.sh
+  - ./jira-backup.sh
   - echo $USERNAME
   - echo $PW
