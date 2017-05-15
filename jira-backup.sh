@@ -27,7 +27,7 @@ exit
 fi
 
 #Checks if the backup exists every 10 seconds, 20 times. If you have a bigger instance with a larger backup file you'll probably want to increase that.
-for (( c=1; c<=60; c++ ))
+for (( c=1; c<=10; c++ ))
 do
 echo 'Checking backup progress...'
 PROGRESS_JSON=$(curl -s --cookie $COOKIE_FILE_LOCATION https://${INSTANCE}/rest/obm/1.0/getprogress.json)
