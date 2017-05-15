@@ -2,7 +2,6 @@
 
 echo "Running jira backup script"
 INSTANCE=gaautobots.atlassian.net
-LOCATION=jira
 
 # Set this to your Atlassian instance's timezone.
 # See this for a list of possible values:
@@ -12,7 +11,9 @@ TIMEZONE=Australia/Sydney
 # Grabs cookies and generates the backup on the UI.
 TODAY=$(TZ=$TIMEZONE date +%Y%m%d)
 COOKIE_FILE_LOCATION=jiracookie
+
 echo 'Initiating backup'
+
 curl --silent --cookie-jar $COOKIE_FILE_LOCATION -X POST "https://${INSTANCE}/rest/auth/1/session" -d "{\"username\": \"$USERNAME\", \"password\": \"$PASSWORD\"}" -H 'Content-Type: application/json' --output /dev/null
 #The $BKPMSG variable will print the error message, you can use it if you're planning on sending an email
 BKPMSG=$(curl -s --cookie $COOKIE_FILE_LOCATION --header "X-Atlassian-Token: no-check" -H "X-Requested-With: XMLHttpRequest" -H "Content-Type: application/json"  -X POST https://${INSTANCE}/rest/obm/1.0/runbackup -d '{"cbAttachments":"true" }' )
@@ -48,11 +49,11 @@ then
         exit
 else
 
-    #If it's confirmed that the backup exists the file get's copied to the $LOCATION directory.
+    #If it's confirmed that the backup exists the file get's copied to the current directory.
     if [[ $FILE_NAME == *"ondemandbackupmanager/download"* ]]; then
         #Download the new way, starting Nov 2016
-        #wget --load-cookies=$COOKIE_FILE_LOCATION -t 0 --retry-connrefused "https://${INSTANCE}/$FILE_NAME" -O "$LOCATION/JIRA-backup-${TODAY}.zip" >/dev/null 2>/dev/null
-        curl --silent --show-error --location --cookie $COOKIE_FILE_LOCATION --request GET --url https://${INSTANCE}/$FILE_NAME --output $LOCATION/jira-backup-${TODAY}.zip
+        #wget --load-cookies=$COOKIE_FILE_LOCATION -t 0 --retry-connrefused "https://${INSTANCE}/$FILE_NAME" -O "JIRA-backup-${TODAY}.zip" >/dev/null 2>/dev/null
+        curl --silent --show-error --location --cookie $COOKIE_FILE_LOCATION --request GET --url https://${INSTANCE}/$FILE_NAME --output jira-backup-${TODAY}.zip
         else
         #Deprecated download from WEBDAV
         echo "Attempted to download from WEBDAV directory, which is no longer supported"
@@ -63,4 +64,4 @@ fi
 rm $COOKIE_FILE_LOCATION
 
 echo 'Uploading to S3 bucket...'
-aws s3 cp $LOCATION/jira-backup-${TODAY}.zip s3://ga-jira/
+aws s3 cp jira-backup-${TODAY}.zip s3://ga-jira/
