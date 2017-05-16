@@ -1,7 +1,6 @@
 #!/bin/bash
 
 echo "Running jira backup script"
-INSTANCE=gaautobots.atlassian.net
 
 # Set this to your Atlassian instance's timezone.
 # See this for a list of possible values:
@@ -27,7 +26,7 @@ if [ "$(echo "$BKPMSG" | grep -ic backup)" -ne 0 ]; then
 fi
 
 #Checks if the backup exists every 10 seconds, 20 times. If you have a bigger instance with a larger backup file you'll probably want to increase that.
-for (( c=1; c<=10; c++ ))
+for (( c=1; c<=20; c++ ))
     do
     echo 'Checking backup progress...'
     PROGRESS_JSON=$(curl -s --cookie $COOKIE_FILE_LOCATION https://${INSTANCE}/rest/obm/1.0/getprogress.json)
@@ -43,7 +42,7 @@ for (( c=1; c<=10; c++ ))
     sleep 10
 done
 
-#If after 10 attempts it still fails it ends the script.
+#If after 20 attempts it still fails it ends the script.
 if [ -z "$FILE_NAME" ];
 then
         rm $COOKIE_FILE_LOCATION
@@ -66,4 +65,4 @@ fi
 rm $COOKIE_FILE_LOCATION
 
 echo 'Uploading to S3 bucket...'
-aws s3 cp jira-backup-${TODAY}.zip s3://ga-jira/
+aws s3 cp jira-backup-${TODAY}.zip s3://${S3_BUCKET}/
