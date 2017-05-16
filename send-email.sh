@@ -3,7 +3,7 @@
 TO="Email To <cloudenablement@ga.gov.au>"
 FROM="Email From <autobots@cloud.ga.gov.au>"
 SUBJECT="<FAILED: Jira Backup>"
-MESSAGE="<Jira backup has failed - ensure Travis build has executed successfully>"
+MESSAGE="Jira backup has failed - ensure Travis build has executed successfully"
 
 date="$(date -R)"
 priv_key="$AWS_SECRET_ACCESS_KEY"
