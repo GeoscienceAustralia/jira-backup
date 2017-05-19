@@ -32,6 +32,9 @@ for (( c=1; c<=60; c++ ))
     PROGRESS_JSON=$(curl -s --cookie $COOKIE_FILE_LOCATION https://${INSTANCE}/rest/obm/1.0/getprogress.json)
     FILE_NAME=$(echo "$PROGRESS_JSON" | sed -n 's/.*"fileName"[ ]*:[ ]*"\([^"]*\).*/\1/p')
 
+    echo $PROGRESS_JSON
+    echo $FILE_NAME
+
     if [[ $PROGRESS_JSON == *"error"* ]]; then
     break
     fi
@@ -42,7 +45,6 @@ for (( c=1; c<=60; c++ ))
     sleep 10
 done
 
-echo $PROGRESS_JSON
 
 #If after 60 attempts it still fails it ends the script.
 if [ -z "$FILE_NAME" ];
