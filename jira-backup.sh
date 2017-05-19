@@ -25,8 +25,8 @@ if [ "$(echo "$BKPMSG" | grep -ic backup)" -ne 0 ]; then
     ./send-email.sh
 fi
 
-#Checks if the backup exists every 10 seconds, 20 times. If you have a bigger instance with a larger backup file you'll probably want to increase that.
-for (( c=1; c<=20; c++ ))
+#Checks if the backup exists every 10 seconds, 60 times. If you have a bigger instance with a larger backup file you'll probably want to increase that.
+for (( c=1; c<=60; c++ ))
     do
     echo 'Checking backup progress...'
     PROGRESS_JSON=$(curl -s --cookie $COOKIE_FILE_LOCATION https://${INSTANCE}/rest/obm/1.0/getprogress.json)
@@ -42,7 +42,9 @@ for (( c=1; c<=20; c++ ))
     sleep 10
 done
 
-#If after 20 attempts it still fails it ends the script.
+echo $PROGRESS_JSON
+
+#If after 60 attempts it still fails it ends the script.
 if [ -z "$FILE_NAME" ];
 then
         rm $COOKIE_FILE_LOCATION
@@ -50,7 +52,7 @@ then
         exit
 else
 
-    #If it's confirmed that the backup exists the file get's copied to the current directory.
+    #If it's confirmed that the backup exists the file gets copied to the current directory.
     if [[ $FILE_NAME == *"ondemandbackupmanager/download"* ]]; then
         #Download the new way, starting Nov 2016
         #wget --load-cookies=$COOKIE_FILE_LOCATION -t 0 --retry-connrefused "https://${INSTANCE}/$FILE_NAME" -O "JIRA-backup-${TODAY}.zip" >/dev/null 2>/dev/null
