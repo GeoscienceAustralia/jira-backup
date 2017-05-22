@@ -25,8 +25,8 @@ if [ "$(echo "$BKPMSG" | grep -ic backup)" -ne 0 ]; then
     ./send-email.sh
 fi
 
-#Checks if the backup exists every 10 seconds, 60 times. If you have a bigger instance with a larger backup file you'll probably want to increase that.
-for (( c=1; c<=60; c++ ))
+#Checks if the backup exists every 10 seconds, 120 times. If you have a bigger instance with a larger backup file you'll probably want to increase that.
+for (( c=1; c<=120; c++ ))
     do
     echo 'Checking backup progress...'
     PROGRESS_JSON=$(curl -s --cookie $COOKIE_FILE_LOCATION https://${INSTANCE}/rest/obm/1.0/getprogress.json)
@@ -46,7 +46,7 @@ for (( c=1; c<=60; c++ ))
 done
 
 
-#If after 60 attempts it still fails it ends the script.
+#If after 120 attempts it still fails it ends the script.
 if [ -z "$FILE_NAME" ];
 then
         rm $COOKIE_FILE_LOCATION
