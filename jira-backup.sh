@@ -22,7 +22,7 @@ if [ "$(echo "$BKPMSG" | grep -ic backup)" -ne 0 ]; then
     echo 'Unable to make backup at this time'
     echo $BKPMSG
     echo 'Emailing Cloud Enablement...'
-    ./send-email.sh
+    ./send-email.sh $BKPMSG
 fi
 
 #Checks if the backup exists every 10 seconds, 120 times. If you have a bigger instance with a larger backup file you'll probably want to increase that.

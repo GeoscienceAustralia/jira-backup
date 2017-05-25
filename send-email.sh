@@ -1,9 +1,11 @@
 #!/bin/bash
 
+ERROR=$1
+
 TO="Email To <cloudenablement@ga.gov.au>"
 FROM="Email From <autobots@cloud.ga.gov.au>"
 SUBJECT="<FAILED: Jira Backup>"
-MESSAGE="Jira backup has failed - ensure Travis build has executed successfully"
+MESSAGE="Jira backup has failed - ensure Travis build has executed successfully ${1}"
 
 date="$(date -R)"
 priv_key="$AWS_SECRET_ACCESS_KEY"
@@ -18,4 +20,4 @@ to="Destination.ToAddresses.member.1=$TO"
 subject="Message.Subject.Data=$SUBJECT"
 message="Message.Body.Text.Data=$MESSAGE"
 
-curl -v -X POST -H "Date: $date" -H "$auth_header" --data-urlencode "$message" --data-urlencode "$to" --data-urlencode "$source" --data-urlencode "$action" --data-urlencode "$subject"  "$endpoint"
+#curl -v -X POST -H "Date: $date" -H "$auth_header" --data-urlencode "$message" --data-urlencode "$to" --data-urlencode "$source" --data-urlencode "$action" --data-urlencode "$subject"  "$endpoint"
